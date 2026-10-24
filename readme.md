@@ -3,10 +3,24 @@
 Topic: Bayesian Optimisation vs Evolutionary Strategies
 (https://alexxthiery.github.io/teaching/bo-vs-es/bo-vs-es.html)
 
+## Overview 
+This project investigates how effective dimension and rotation affect the relative performance of Gaussian-process Bayesian optimisation (BO) and the covariance matrix adaptation evolution strategy (CMA-ES) under a fixed evaluation budget.
+
+We use synthetic weighted-quadratic functions to control the effective dimension and orientation of important search directions while keeping the ambient dimension fixed. Random search is included as a baseline.
+
 ## Research question
-Can Bayesian optimisation and CMA-ES find and exploit the important directions
-of a problem when those directions are not aligned with the coordinate axes
-(rotation and low effective dimension), and does this explain when each method wins?
+How do effective dimension and rotation affect the relative performance of Gaussian-process Bayesian optimisation (BO) and CMA-ES under a fixed evaluation budget?
+
+## Methods:
+- Algorithms: Gaussian-process Bayesian optimisation, CMA-ES, and random search.
+
+- Test functions: Synthetic weighted-quadratic functions with varying effective dimensions and orientations.
+
+- Experimental design: 
+
+- Evaluation budget:
+
+- Performance metric: Best objective value found within the evaluation budget.
 
 ## Environment and dependencies
 Python 3.11+, CPU only.
