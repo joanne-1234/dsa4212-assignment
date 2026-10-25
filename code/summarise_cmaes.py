@@ -1,16 +1,21 @@
-"""Summarise one method's results folder.
+"""Summarise the CMA-ES results.
 
 Usage (from the repo folder):
-    python code/summarise.py cmaes
+    python code/summarise_cmaes.py cmaes
 
-Reads results/<method>/d*_problem*.csv (one file per run) and writes:
-    results/<method>/<method>_runs.csv      one row per run (final best, best at 100/200)
-    results/<method>/<method>_summary.csv   one row per effective dimension
+Reads results/cmaes/d*_problem*.csv (one file per run, written by
+code/cmaes.py) and writes three files to results/cmaes/:
+    cmaes_runs.csv              one row per run (best at 100, 200 and 400 evaluations)
+    cmaes_summary.csv           one row per effective dimension (medians, rotation penalty)
+    cmaes_rotation_effects.csv  log rotation penalty for each problem pair
 and prints the summary table. Stops with an error if any run is missing,
 duplicated or incomplete.
 
 The rotation penalty comes from matched runs, so it need not equal
 rotated_median / aligned_median.
+
+Other methods can reuse this script by passing their folder name instead
+of cmaes, if their run files use the same name pattern and columns.
 """
 import sys
 from pathlib import Path
