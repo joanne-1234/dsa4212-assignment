@@ -4,8 +4,8 @@ Usage (from the repo folder):
     python code/summarise.py cmaes
 
 Reads results/<method>/d*_problem*.csv (one file per run) and writes:
-    results/<method>_runs.csv     one row per run (final best, best at 100/200)
-    results/<method>_summary.csv  one row per effective dimension
+    results/<method>/<method>_runs.csv      one row per run (final best, best at 100/200)
+    results/<method>/<method>_summary.csv   one row per effective dimension
 and prints the summary table. Stops with an error if any run is missing,
 duplicated or incomplete.
 
@@ -65,7 +65,7 @@ if not runs["n_evals"].eq(400).all():
 if not np.isfinite(runs["final_best"]).all() or runs["final_best"].lt(0).any():
     raise ValueError("Final values must be finite and non-negative.")
 
-runs.to_csv(results / f"{method}_runs.csv", index=False)
+runs.to_csv(results / method / f"{method}_runs.csv", index=False)
 
 # 3. Final performance: median over the 10 runs per orientation.
 # The median describes typical performance and limits the influence
@@ -84,12 +84,12 @@ wide = runs.pivot_table(index=["d", "problem_seed", "method_seed"],
 log_ratio = (np.log(wide[True].clip(lower=EPSILON))
              - np.log(wide[False].clip(lower=EPSILON)))
 pair_effect = log_ratio.groupby(["d", "problem_seed"]).mean()
-pair_effect.rename("log_rotation_penalty").to_csv(results / f"{method}_rotation_effects.csv")
+pair_effect.rename("log_rotation_penalty").to_csv(results / method / f"{method}_rotation_effects.csv")
 summary["penalty_geomean"] = np.exp(pair_effect.groupby("d").mean())
 summary["penalty_min"] = np.exp(pair_effect.groupby("d").min())
 summary["penalty_max"] = np.exp(pair_effect.groupby("d").max())
 summary["n_runs"] = runs.groupby("d").size()
 
-summary.to_csv(results / f"{method}_summary.csv")
+summary.to_csv(results / method / f"{method}_summary.csv")
 print(f"{method}: {len(runs)} runs, all checks passed\n")
 print(summary.to_string(float_format="{:.3g}".format))
