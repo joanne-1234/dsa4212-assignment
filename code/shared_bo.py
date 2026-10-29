@@ -13,13 +13,13 @@ from sklearn.gaussian_process.kernels import ConstantKernel
 from objective import D, make_weighted_quadratic
 
 
-# Shared experimental settings (match code/cmaes.py).
+# Shared experimental settings
 EFFECTIVE_DIMS = [2, 5, 10, 15, 20]
 PROBLEM_SEEDS = [0, 1, 2, 3, 4]
 METHOD_SEEDS = [100, 101]
 BUDGET = 400
 
-# Shared GP-BO settings (from shared_bo_design.ipynb).
+# Shared GP-BO settings
 # Keep these identical for ARD and isotropic so only the kernel differs.
 BOUNDS = (-1.0, 1.0)
 N_INITIAL = 40
@@ -28,20 +28,19 @@ JITTER = 1e-8
 N_RESTARTS = 1
 EI_XI = 0.01
 LENGTH_SCALE_BOUNDS = (1e-3, 1e2)
-MATERN_NU = 2.5
 
 # Signal variance of the GP prior, on the standardised y scale.
 CONSTANT_VALUE_BOUNDS = (1e-3, 1e3)
 
 
 def make_gp_kernel(base_kernel):
-    """Scale a Matérn base kernel by a learned signal variance."""
+    """Scale an RBF base kernel by a learned signal variance."""
     return ConstantKernel(1.0, CONSTANT_VALUE_BOUNDS) * base_kernel
 
 
 def length_scales(kernel):
-    """Return the fitted Matérn length scale(s) as a 1D array."""
-    # Kernel is ConstantKernel * Matern, so the Matérn part is k2.
+    """Return the fitted RBF length scale(s) as a 1D array."""
+    # Kernel is ConstantKernel * RBF, so the RBF part is k2.
     return np.atleast_1d(kernel.k2.length_scale).astype(float)
 
 
@@ -68,7 +67,7 @@ def run_gp_bo(d, problem_seed, rotated, method_seed, base_kernel, method):
     method_seed determines the initial design, candidate sets and
     GP hyperparameter restarts.
 
-    base_kernel is the only method-specific input: a Matérn kernel with
+    base_kernel is the only method-specific input: an RBF kernel with
     either one length scale (isotropic) or D length scales (ARD).
 
     Returns one result row per objective evaluation.
@@ -121,8 +120,6 @@ def run_gp_bo(d, problem_seed, rotated, method_seed, base_kernel, method):
             for i, coordinate in enumerate(x)
         })
 
-        # Length scales of the GP that proposed this point (NaN for the
-        # initial design). Shows which directions the model treats as active.
         row.update({
             f"length_scale{i}": float(scale)
             for i, scale in enumerate(scales)
@@ -150,8 +147,6 @@ def run_gp_bo(d, problem_seed, rotated, method_seed, base_kernel, method):
             random_state=int(rng.integers(2**31 - 1)),
         )
 
-        # Hyperparameters hitting their bounds is expected (e.g. long
-        # length scales on inactive directions), so silence that warning.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", ConvergenceWarning)
             gp.fit(X, y_scaled)
@@ -183,7 +178,7 @@ def run_gp_bo(d, problem_seed, rotated, method_seed, base_kernel, method):
             n_initial=N_INITIAL,
             n_candidates=N_CANDIDATES,
             ei_xi=EI_XI,
-            matern_nu=MATERN_NU,
+            kernel=type(base_kernel).__name__,
             jitter=JITTER,
             n_restarts=N_RESTARTS,
             sklearn_version=sklearn.__version__,
