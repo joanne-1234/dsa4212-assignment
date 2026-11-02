@@ -1,6 +1,5 @@
 cma==4.5.0
-botorch
-torch
+scikit-learn
 scipy
 numpy==2.4.6
 matplotlib
