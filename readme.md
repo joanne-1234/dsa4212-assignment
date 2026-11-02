@@ -57,7 +57,6 @@ We compare four methods:
 - `requirements.txt`: required Python libraries.
 - `report/`: LaTeX report source, bibliography and figures.
 - `code/`: shared objective function, experiment and plotting code.
-- `configs/`: experiment configurations.
 - `results/`: saved numerical results, organised by experiment.
 
 

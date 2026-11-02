@@ -106,3 +106,5 @@ if __name__ == "__main__":
             f"runtime={rows[-1]['runtime_s']:.0f}s"
         )
         print("Final length scales:", np.round(scales, 3))
+    else:
+        run_all()
