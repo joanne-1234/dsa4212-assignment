@@ -87,7 +87,6 @@ def run_all():
 
 
 if __name__ == "__main__":
-    # Start with one test run. Change to False after checking its output.
     TEST_RUN = False
 
     if TEST_RUN:
