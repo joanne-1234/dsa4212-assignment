@@ -86,7 +86,7 @@ This objective uses equal weights and a Hadamard-based rotation, such that there
 └── results/
     ├── cmaes/
     ├── bo_ard/
-    ├── iso_bo/
+    ├── isotropic_bo/
     ├── random_search/
     └── supplementary_equal_curvature/
         ├── isotropic_bo_equal_curvature/
@@ -163,6 +163,12 @@ jupyter notebook code/analysis.ipynb
 ```
 - The notebook loads the saved main and supplementary experiment results and generates the performance comparisons and figures used in the analysis.
 - Existing CSVs and summaries are included in results/, so the saved results can be inspected without rerunning the experiments.
+
+### 4. Build the report
+Requires a LaTeX distribution (e.g. TinyTeX) with: libertine, preprint, booktabs, float, natbib.
+```bash
+cd report && pdflatex report.tex
+```
 
 ## Reproducibility notes:
 - The main ARD-BO experiment was run using scikit-learn 1.7.2 and NumPy 2.2.6.
